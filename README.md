@@ -1,18 +1,24 @@
-# package-localisation-seed
+# package-logger
 
-Seed localisation for Valyous repos
+Logger utility for Givers repos
 
 ### Installation
-```npm i --save TamuzGroup/package-localisation-seed```
+```npm i --save TamuzGroup/package-logger```
 
 ### Parameters
-* bucket (default: 'https://valyous-public.s3-eu-west-1.amazonaws.com/i18n/')
-* platform (options: api / web / chat-embed)
-* locale_dir (default: 'locales/')
-fs directory to save localisation files.
+1. Logs output location: /tmp/logs-%DATE%.log',
+2. Date Pattern: 'YYYY-MM-DD-HH',
+3. Each file size is up to: 100MB
+4. Maximum number of files is 3
 
 ### Usage
+1. Add to package.json dependencies
 
-Add to package.json scripts (example below for api resource)
+2. creating the logger in each file where it will be used:
+const logger = require('@utils/logger.util')(__filename);
 
-```"i18n:seed": "node node_modules/package-localisation-seed --platform=api --locale_dir=i18n/locales/"```
+3. Using the logger:
+logger.info('this is an info level log');
+logger.warn('this is a warning level log');
+try { throw new Error('logging an exception'); }
+catch (e) { logger.error('this is an exception', e); }
