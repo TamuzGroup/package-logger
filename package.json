@@ -1,0 +1,15 @@
+{
+  "name": "package-logger",
+  "version": "1.0.0",
+  "description": "Givers logger package.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
+  }
+}
