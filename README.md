@@ -15,7 +15,7 @@ Logger utility for Givers repos
 1. Add to package.json dependencies
 
 2. creating the logger in each file where it will be used:
-const logger = require('@utils/logger.util')(__filename);
+const logger = require('package-logger')(__filename);
 
 3. Using the logger:
 logger.info('this is an info level log');
