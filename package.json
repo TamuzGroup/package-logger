@@ -1,6 +1,6 @@
 {
   "name": "package-logger",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Givers logger package.",
   "main": "index.js",
   "scripts": {
