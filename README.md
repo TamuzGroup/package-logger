@@ -21,40 +21,15 @@ text - is the logged argument
 serviceName, environmentName - can be configured via dedicated functions
 
 
-### Usage - Simple
-1. Add to package.json dependencies
-
-2. creating the logger in each file where it will be used:
-const logger = require('package-logger');
-
-3. Using the logger:
-logger.info('this is an info level log');
-logger.warn('this is a warning level log');
-try { throw new Error('logging an exception'); }
-catch (e) { logger.error('this is an exception', e); }
-
-
-### Usage - Advanced
+### Usage 
 1. Add to package.json dependencies
 
 2. creating the myLogger module:
-   const logger = require('package-logger');
+   const Logger = require('package-logger');
 
-   logger.updateServiceName('ServiceName');
-   logger.updateEnvironmentName('EnvironmentName');
-    
-   const {
-    info, error, debug, warn,
-   } = logger.function();
-    
-   module.exports = {
-    info,
-    error,
-    debug,
-    warn,
-   };
-   
-   const logger = require('package-logger');
+   const logger = new Logger('ServiceName', 'EnvironmentName');
+
+   module.exports = logger;
 
 3. creating the logger in each file where it will be used:
    const logger = require('myLogger');
