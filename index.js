@@ -34,7 +34,7 @@ function getCallDetails() {
   }
 }
 
-class BaseLogger {
+class Logger {
 
   constructor(serviceName, environmentName) {
     try {
@@ -97,4 +97,4 @@ class BaseLogger {
    };
 }
 
-module.exports = BaseLogger;
+module.exports = Logger;
