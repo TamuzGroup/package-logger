@@ -4,23 +4,27 @@ require('winston-daily-rotate-file');
 class BaseLogger {
 
   constructor(serviceName, environmentName) {
-    this.service = serviceName;
-    this.environment = environmentName;
+    try {
+      this.service = serviceName;
+      this.environment = environmentName;
 
-    this.logger = winston.createLogger({
-      levels: winston.config.npm.levels,
-      format: winston.format.simple(),
-      transports: [
-        new winston.transports.Console({ format: winston.format.simple() }),
-        new winston.transports.DailyRotateFile({
-          filename: '/tmp/logs-%DATE%.log',
-          datePattern: 'YYYY-MM-DD-HH',
-          zippedArchive: true,
-          maxSize: '100m', // 100MB
-          maxFiles: '3', // delete older files, keep up to last 3
-        }),
-      ],
-    });
+      this.logger = winston.createLogger({
+        levels: winston.config.npm.levels,
+        format: winston.format.simple(),
+        transports: [
+          new winston.transports.Console({format: winston.format.simple()}),
+          new winston.transports.DailyRotateFile({
+            filename: '/tmp/logs-%DATE%.log',
+            datePattern: 'YYYY-MM-DD-HH',
+            zippedArchive: true,
+            maxSize: '100m', // 100MB
+            maxFiles: '3', // delete older files, keep up to last 3
+          }),
+        ],
+      });
+    } catch (e) {
+      console.error('Failed to create BaseLogger', e);
+    }
   };
 
   createMessage (fileName, text, level, serviceName, env) {
@@ -51,7 +55,7 @@ class BaseLogger {
       const fileName = frame.split('/').reverse()[0].split(':')[0];
       return `${fileName}:${lineNumber}`;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       return 'FileNameError';
     }
   };
