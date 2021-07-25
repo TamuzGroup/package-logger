@@ -27,7 +27,7 @@ class BaseLogger {
     // Format: level|time|platform|Environment|file name|message|
     const tNowStr = new Date().toISOString();
     return `${level}|${tNowStr}|${serviceName}|${env}|${fileName}|${text}|`;
-};
+  };
 
   parseParameters (data) {
     const fullStr = data.reduce((acc, s) => {
@@ -41,7 +41,7 @@ class BaseLogger {
     }, '');
     // convert all \n to .\t
     return fullStr.trim().replace(new RegExp('\n', 'g'), () => '.\t');
-};
+  };
 
   getCallDetails() {
     try {
