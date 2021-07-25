@@ -16,8 +16,12 @@ const logger = winston.createLogger({
   ],
 });
 
-const service = 'SERVICE';
-const environment = 'ENV';
+let service = 'SERVICE';
+let environment = 'ENV';
+
+const updateServiceName = (serviceName) => { service = serviceName; }
+
+const updateEnvironmentName = (environmentName) => { environment = environmentName; }
 
 const createMessage = (fileName, text, level, serviceName, env) => {
   // Format: level|time|platform|Environment|file name|message|
@@ -42,46 +46,48 @@ const parseParameters = function (data) {
 const getCallDetails = () => {
   const e = new Error();
   const frame = e.stack.split('\n')[3];
-  return frame.split(':').reverse()[1];
+  const lineNumber = frame.split(':').reverse()[1];
+  const fileName = frame.split(':').reverse()[0];
+  return `${fileName}:${lineNumber}`
 };
 
-module.exports = function (fileName, serviceName = service, envName = environment) {
-  return {
-    error(...data) {
-      try {
-        const call = getCallDetails();
-        const detailedFile = `${fileName}:${call}`;
-        const fullStr = parseParameters(data);
-        console.error(...data);
-        logger.error(createMessage(detailedFile, fullStr, 'ERROR', serviceName, envName));
-      } catch (e) { console.error(e); }
-    },
-    info(...data) {
-      try {
-        const call = getCallDetails();
-        const detailedFile = `${fileName}:${call}`;
-        const fullStr = parseParameters(data);
-        console.info(...data);
-        logger.info(createMessage(detailedFile, fullStr, 'INFO', serviceName, envName));
-      } catch (e) { console.error(e); }
-    },
-    warn(...data) {
-      try {
-        const call = getCallDetails();
-        const detailedFile = `${fileName}:${call}`;
-        const fullStr = parseParameters(data);
-        console.warn(...data);
-        logger.warn(createMessage(detailedFile, fullStr, 'WARN', serviceName, envName));
-      } catch (e) { console.error(e); }
-    },
-    debug(...data) {
-      try {
-        const call = getCallDetails();
-        const detailedFile = `${fileName}:${call}`;
-        const fullStr = parseParameters(data);
-        console.debug(...data);
-        logger.debug(createMessage(detailedFile, fullStr, 'DEBUG', serviceName, envName));
-      } catch (e) { console.error(e); }
-    },
-  };
+module.exports = {
+  function () {
+    return {
+      error(...data) {
+        try {
+          const detailedFile = getCallDetails();
+          const fullStr = parseParameters(data);
+          console.error(...data);
+          logger.error(createMessage(detailedFile, fullStr, 'ERROR', service, environment));
+        } catch (e) { console.error(e); }
+      },
+      info(...data) {
+        try {
+          const detailedFile = getCallDetails();
+          const fullStr = parseParameters(data);
+          console.info(...data);
+          logger.info(createMessage(detailedFile, fullStr, 'INFO', service, environment));
+        } catch (e) { console.error(e); }
+      },
+      warn(...data) {
+        try {
+          const detailedFile = getCallDetails();
+          const fullStr = parseParameters(data);
+          console.warn(...data);
+          logger.warn(createMessage(detailedFile, fullStr, 'WARN', service, environment));
+        } catch (e) { console.error(e); }
+      },
+      debug(...data) {
+        try {
+          const detailedFile = getCallDetails();
+          const fullStr = parseParameters(data);
+          console.debug(...data);
+          logger.debug(createMessage(detailedFile, fullStr, 'DEBUG', service, environment));
+        } catch (e) { console.error(e); }
+      },
+    };
+  },
+  updateServiceName,
+  updateEnvironmentName,
 };
