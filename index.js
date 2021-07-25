@@ -44,11 +44,16 @@ const parseParameters = function (data) {
 };
 
 const getCallDetails = () => {
-  const e = new Error();
-  const frame = e.stack.split('\n')[3];
-  const lineNumber = frame.split(':').reverse()[1];
-  const fileName = frame.split(':').reverse()[0];
-  return `${fileName}:${lineNumber}`
+  try {
+    const e = new Error();
+    const frame = e.stack.split('\n')[3];
+    const lineNumber = frame.split(':').reverse()[1];
+    const fileName = frame.split('/').reverse()[0].split(':')[0];
+    return `${fileName}:${lineNumber}`;
+  } catch (e) {
+    console.log(e);
+    return 'FileNameError';
+  }
 };
 
 module.exports = {
