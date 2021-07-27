@@ -43,7 +43,7 @@ class Logger {
     ERROR_LEVEL: 4,
   };
 
-  constructor(serviceName, environmentName, minimalLevel = this.LOG_LEVELS.INFO_LEVEL) {
+  constructor(serviceName, environmentName, minimalLevel = this.LOG_LEVELS.WARNING_LEVEL) {
     try {
       this.service = serviceName;
       this.environment = environmentName;
