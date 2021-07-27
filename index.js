@@ -36,10 +36,18 @@ function getCallDetails() {
 
 class Logger {
 
-  constructor(serviceName, environmentName) {
+  LOG_LEVELS = {
+    DEBUG_LEVEL: 1,
+    WARNING_LEVEL: 2,
+    INFO_LEVEL: 3,
+    ERROR_LEVEL: 4,
+  };
+
+  constructor(serviceName, environmentName, minimalLevel = this.LOG_LEVELS.WARNING_LEVEL) {
     try {
       this.service = serviceName;
       this.environment = environmentName;
+      this.level = minimalLevel;
 
       this.logger = winston.createLogger({
         levels: winston.config.npm.levels,
@@ -62,39 +70,51 @@ class Logger {
 
   error(...data) {
    try {
-     const detailedFile = getCallDetails();
-     const fullStr = parseParameters(data);
-     console.error(...data);
-     this.logger.error(createMessage(detailedFile, fullStr, 'ERROR', this.service, this.environment));
+     if (this.level <= this.LOG_LEVELS.ERROR_LEVEL) {
+       const detailedFile = getCallDetails();
+       const fullStr = parseParameters(data);
+       console.error(...data);
+       this.logger.error(createMessage(detailedFile, fullStr, 'ERROR', this.service, this.environment));
+     }
    } catch (e) { console.error(e); }
   };
 
   info(...data) {
      try {
-       const detailedFile = getCallDetails();
-       const fullStr = parseParameters(data);
-       console.info(...data);
-       this.logger.info(createMessage(detailedFile, fullStr, 'INFO', this.service, this.environment));
+       if (this.level <= this.LOG_LEVELS.INFO_LEVEL) {
+         const detailedFile = getCallDetails();
+         const fullStr = parseParameters(data);
+         console.info(...data);
+         this.logger.info(createMessage(detailedFile, fullStr, 'INFO', this.service, this.environment));
+       }
      } catch (e) { console.error(e); }
    };
 
    warn(...data) {
      try {
-       const detailedFile = getCallDetails();
-       const fullStr = parseParameters(data);
-       console.warn(...data);
-       this.logger.warn(createMessage(detailedFile, fullStr, 'WARN', this.service, this.environment));
+       if (this.level <= this.LOG_LEVELS.WARNING_LEVEL) {
+         const detailedFile = getCallDetails();
+         const fullStr = parseParameters(data);
+         console.warn(...data);
+         this.logger.warn(createMessage(detailedFile, fullStr, 'WARN', this.service, this.environment));
+       }
      } catch (e) { console.error(e); }
    };
 
    debug(...data) {
      try {
-       const detailedFile = getCallDetails();
-       const fullStr = parseParameters(data);
-       console.debug(...data);
-       this.logger.debug(createMessage(detailedFile, fullStr, 'DEBUG', this.service, this.environment));
+       if (this.level <= this.LOG_LEVELS.DEBUG_LEVEL) {
+         const detailedFile = getCallDetails();
+         const fullStr = parseParameters(data);
+         console.debug(...data);
+         this.logger.debug(createMessage(detailedFile, fullStr, 'DEBUG', this.service, this.environment));
+       }
      } catch (e) { console.error(e); }
    };
+
+   setMinimalLogLevel(minimalLevel) {
+     this.level = minimalLevel;
+   }
 }
 
 module.exports = Logger;
