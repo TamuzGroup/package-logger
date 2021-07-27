@@ -34,16 +34,16 @@ function getCallDetails() {
   }
 }
 
+const LOG_LEVELS = Object.freeze({
+  DEBUG_LEVEL: 1,
+  WARNING_LEVEL: 2,
+  INFO_LEVEL: 3,
+  ERROR_LEVEL: 4,
+});
+
 class Logger {
 
-  LOG_LEVELS = {
-    DEBUG_LEVEL: 1,
-    WARNING_LEVEL: 2,
-    INFO_LEVEL: 3,
-    ERROR_LEVEL: 4,
-  };
-
-  constructor(serviceName, environmentName, minimalLevel = this.LOG_LEVELS.WARNING_LEVEL) {
+  constructor(serviceName, environmentName, minimalLevel = LOG_LEVELS.WARNING_LEVEL) {
     try {
       this.service = serviceName;
       this.environment = environmentName;
@@ -70,7 +70,7 @@ class Logger {
 
   error(...data) {
    try {
-     if (this.level <= this.LOG_LEVELS.ERROR_LEVEL) {
+     if (this.level <= LOG_LEVELS.ERROR_LEVEL) {
        const detailedFile = getCallDetails();
        const fullStr = parseParameters(data);
        console.error(...data);
@@ -81,7 +81,7 @@ class Logger {
 
   info(...data) {
      try {
-       if (this.level <= this.LOG_LEVELS.INFO_LEVEL) {
+       if (this.level <= LOG_LEVELS.INFO_LEVEL) {
          const detailedFile = getCallDetails();
          const fullStr = parseParameters(data);
          console.info(...data);
@@ -92,7 +92,7 @@ class Logger {
 
    warn(...data) {
      try {
-       if (this.level <= this.LOG_LEVELS.WARNING_LEVEL) {
+       if (this.level <= LOG_LEVELS.WARNING_LEVEL) {
          const detailedFile = getCallDetails();
          const fullStr = parseParameters(data);
          console.warn(...data);
@@ -103,7 +103,7 @@ class Logger {
 
    debug(...data) {
      try {
-       if (this.level <= this.LOG_LEVELS.DEBUG_LEVEL) {
+       if (this.level <= LOG_LEVELS.DEBUG_LEVEL) {
          const detailedFile = getCallDetails();
          const fullStr = parseParameters(data);
          console.debug(...data);
@@ -117,4 +117,7 @@ class Logger {
    }
 }
 
-module.exports = Logger;
+module.exports = {
+  Logger,
+  LOG_LEVELS
+};
