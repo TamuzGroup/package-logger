@@ -1,7 +1,7 @@
 {
   "name": "package-logger",
-  "version": "1.0.6",
-  "description": "Givers logger package.",
+  "version": "1.0.8",
+  "description": "Givers logger package",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
