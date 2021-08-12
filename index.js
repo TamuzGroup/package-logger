@@ -1,10 +1,11 @@
 const winston = require('winston');
+const pJson = require('./package.json');
 require('winston-daily-rotate-file');
 
 function createMessage (fileName, text, level, serviceName, env) {
   // Format: level|time|platform|Environment|file name|message|
   const tNowStr = new Date().toISOString();
-  return {level:level, time:tNowStr, service_name:serviceName, env:env, path:fileName, msg:text};
+  return {level:level, time:tNowStr, service_name:serviceName, environment:env, path:fileName, message:text};
 }
 
 function parseParameters (data) {
@@ -18,7 +19,8 @@ function parseParameters (data) {
     return `${acc} ${val}`;
   }, '');
   // convert all \n to .\t
-  return fullStr.trim().replace(new RegExp('\n', 'g'), () => '.\t');
+  // return fullStr.trim().replace(new RegExp('\n', 'g'), () => '.\t');
+  return fullStr.trim();
 }
 
 function getCallDetails() {
@@ -53,9 +55,10 @@ class Logger {
         levels: winston.config.npm.levels,
         format: winston.format.simple(),
         transports: [
-          new winston.transports.Console({format: winston.format.simple()}),
+          new winston.transports.Console({format: winston.format.json()}),
           new winston.transports.DailyRotateFile({
             filename: '/tmp/logs-%DATE%.log',
+            format: winston.format.json(),
             datePattern: 'YYYY-MM-DD-HH',
             zippedArchive: true,
             maxSize: '100m', // 100MB
@@ -67,6 +70,10 @@ class Logger {
       console.error('Failed to create BaseLogger', e);
     }
   };
+
+  getVersion() {
+    return pJson.version;
+  }
 
   error(...data) {
    try {
