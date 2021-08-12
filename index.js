@@ -4,7 +4,7 @@ require('winston-daily-rotate-file');
 function createMessage (fileName, text, level, serviceName, env) {
   // Format: level|time|platform|Environment|file name|message|
   const tNowStr = new Date().toISOString();
-  return `${level}|${tNowStr}|${serviceName}|${env}|${fileName}|${text}|`;
+  return {level:level, time:tNowStr, service_name:serviceName, env:env, path:fileName, msg:text};
 }
 
 function parseParameters (data) {
