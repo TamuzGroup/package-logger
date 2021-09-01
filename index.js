@@ -55,7 +55,7 @@ class Logger {
         levels: winston.config.npm.levels,
         format: winston.format.simple(),
         transports: [
-          new winston.transports.Console({format: winston.format.simple()}),
+          // new winston.transports.Console({format: winston.format.simple()}),
           new winston.transports.DailyRotateFile({
             filename: '/tmp/logs-%DATE%.log',
             format: winston.format.json(),
